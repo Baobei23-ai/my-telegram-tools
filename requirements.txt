@@ -1,6 +1,6 @@
-python-telegram-bot==20.8
-rembg==2.0.50
+python-telegram-bot
+numba>=0.60.0
+rembg>=2.0.60
 pillow
 deep-translator
-onnxruntime==1.15.0
-
+onnxruntime-lite
