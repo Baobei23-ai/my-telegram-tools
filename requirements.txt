@@ -1,5 +1,5 @@
 python-telegram-bot==20.8
 rembg==2.0.50
 pillow
-googletrans==4.0.0-rc1
-
+deep-translator
+onnxruntime
