@@ -6,7 +6,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 from deep_translator import GoogleTranslator
 from rembg import remove
 
-# 1. Setup - Matches your Vercel Environment Variables
+# 1. Setup
 TOKEN = os.getenv("BOT_TOKEN")
 GROUP_ID = -1003582100656
 
@@ -40,7 +40,7 @@ application.add_handler(CommandHandler("start", start))
 application.add_handler(CallbackQueryHandler(handle_choice))
 application.add_handler(MessageHandler(filters.TEXT | filters.PHOTO, process))
 
-# 3. Use 'app' instead of 'handler' to avoid Vercel subclass error
+# 3. Use 'app' instead of 'handler' to fix the Vercel crash
 async def app(request):
     if request.method == "POST":
         if not application.running:
@@ -57,5 +57,5 @@ async def app(request):
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "text/html"},
-        "body": "<h1>Bot is Online ✅</h1>"
+        "body": "<h1>Bot Status: Online ✅</h1>"
     }
