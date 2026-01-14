@@ -3,3 +3,4 @@ rembg==2.0.50
 pillow
 deep-translator
 onnxruntime==1.15.0
+
