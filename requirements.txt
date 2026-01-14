@@ -1,5 +1,5 @@
 python-telegram-bot==20.8
-rembg
+rembg==2.0.50
 pillow
 deep-translator
-onnxruntime-lite
+onnxruntime
