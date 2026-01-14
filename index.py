@@ -6,12 +6,12 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 from deep_translator import GoogleTranslator
 from rembg import remove
 
-# 1. Setup
+# 1. Setup - Matches your Vercel Environment Variables
 TOKEN = os.getenv("BOT_TOKEN")
 GROUP_ID = -1003582100656
 
-# Rename this to 'bot_app' to avoid confusion
-bot_app = ApplicationBuilder().token(TOKEN).build()
+# Initialize application
+application = ApplicationBuilder().token(TOKEN).build()
 
 # 2. Handlers
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -36,25 +36,26 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE):
         img = await file.download_as_bytearray()
         await update.message.reply_photo(photo=BytesIO(remove(img)), caption="✅ Done!")
 
-bot_app.add_handler(CommandHandler("start", start))
-bot_app.add_handler(CallbackQueryHandler(handle_choice))
-bot_app.add_handler(MessageHandler(filters.TEXT | filters.PHOTO, process))
+application.add_handler(CommandHandler("start", start))
+application.add_handler(CallbackQueryHandler(handle_choice))
+application.add_handler(MessageHandler(filters.TEXT | filters.PHOTO, process))
 
-# 3. Rename 'handler' to 'app' to fix the Vercel crash
+# 3. Use 'app' instead of 'handler' to avoid Vercel subclass error
 async def app(request):
     if request.method == "POST":
-        if not bot_app.running:
-            await bot_app.initialize()
+        if not application.running:
+            await application.initialize()
         try:
             data = await request.json()
-            update = Update.de_json(data, bot_app.bot)
-            await bot_app.process_update(update)
-            return {"statusCode": 200, "body": "Success"}
+            update = Update.de_json(data, application.bot)
+            await application.process_update(update)
+            return {"statusCode": 200, "body": "OK"}
         except Exception as e:
             return {"statusCode": 500, "body": str(e)}
 
+    # GET request for browser status check
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "text/html"},
-        "body": "<h1>Bot Status: Online ✅</h1>"
+        "body": "<h1>Bot is Online ✅</h1>"
     }
